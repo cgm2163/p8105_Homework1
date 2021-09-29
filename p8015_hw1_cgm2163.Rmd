@@ -1,0 +1,129 @@
+---
+title: "p8105 hw1 cgm2163"
+output: github_document
+---
+
+Homework #1 Data Science I
+
+# Problem 1
+
+First, I will upload the tidyverse, which has already been installed on my computer.
+
+```{r}
+library(tidyverse)
+
+```
+
+
+Next, I will upload a **data frame** that samples from 
+a _normal distribution_:
+
+
+```{r}
+
+hw1_df = tibble(
+  
+  ## numeric vector: random sample of 10 from normal distribution
+  
+  numbers = rnorm(10),
+  
+  ## logical vector returning "true" if sample is greater than 0
+  
+  numbers_pos = numbers > 0,
+ 
+  ## character vector of length 10
+  
+  emotions = c("happy", "sad", "amazing", "depressed",
+               "confused", "puzzled", "thrilled", "confident", 
+               "bewildered", "bummed" ),
+  
+  ## factor vector of length 10 with 3 "levels"
+  
+  emotion_class = factor (c("good", "bad", "good", "bad", "unsure",
+                            "unsure", "good", "good", "unsure", 
+                            "bad"))
+  ##vector of factors classifying the types of emotions in the character vector
+  
+  )
+
+```
+
+
+Next, we can attempt to take the **mean** of each vector:
+
+ * The mean of _numbers_ is `r mean(pull(hw1_df, numbers))`.
+
+ * The mean of _numbers_pos_ is `r mean(pull(hw1_df, numbers_pos))`.
+
+However, when we attempt to find the means of _emotions_ and _emotion_class_, we recieve an error.
+
+The code chunk below provides the error: _arguement is not numeric or logical: returning NA_
+
+**mean(pull(hw1_df, emotions))** 
+
+_and_
+
+**mean(pull(hw1_df, emotion_class))**
+
+Now, we can try to convert the variables to numeric to see if we can get a mean using the following code chunk:
+
+**mean(as.numeric(pull(hw1_df, emotions)))**
+
+_and_
+
+**mean(as.numeric(pull(hw1_df, emotion_class)))**
+
+
+The output provides us with another error, _NAs introduced by coercion_ for **emotions**, but produces a numerical mean, 2, for **emotion class**. This is likely because while **emotions** is a string of characters that differs for each **numbers** value, **emotion_class** can be converted essentially into numerical groups of 1, 2, and 3, providing us with a mean = 2.
+
+
+# Problem 2
+
+First, I can install the "palmerpenguins" package with the code provided in the homework.
+
+Next, I can use the additional code provided to load the "penguins" dataset.
+
+```{r}
+
+data("penguins", package = "palmerpenguins")
+
+#list all variables in data set "penguins"
+
+ls(penguins)
+
+#list number of columns in data set "penguins
+
+ncol(penguins)
+
+#list number of rows in data set "penguins
+
+nrow(penguins)
+
+#calculate mean flipper length in mm, ignoring NA values
+
+mean(pull(penguins, flipper_length_mm), na.rm=TRUE)
+
+
+```
+
+
+We can also create a scatterplot representing the association between**bill_length_mm** and **flipper_length_mm**:
+
+
+
+```{r}
+
+#create a scatter plot with bill length = x and flipper length = y
+
+ggplot(penguins, aes(x = bill_length_mm, y = flipper_length_mm, color = species)) + geom_point ()
+
+#save plot as a pdf in the folder
+
+ggsave("bill_flipper_scatter.pdf", height = 4, width = 6)
+
+
+```
+
+
+**End of HW1**
+
